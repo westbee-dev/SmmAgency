@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SmmAgency.Api/SmmAgency.Api.csproj" />
+  <Project Path="SmmAgency.Core/SmmAgency.Core.csproj" />
+  <Project Path="SmmAgency.Data/SmmAgency.Data.csproj" />
+</Solution>

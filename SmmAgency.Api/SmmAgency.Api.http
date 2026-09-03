@@ -1,0 +1,6 @@
+@SmmAgency.Api_HostAddress = http://localhost:5119
+
+GET {{SmmAgency.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
