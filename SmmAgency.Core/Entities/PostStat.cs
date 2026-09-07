@@ -4,10 +4,10 @@ using System.Text;
 
 namespace SmmAgency.Core.Entity
 {
-    public class PostStats
+    public class PostStat
     {
         public int Id { get; set; }
-        public int CampaginId {  get; set; }
+        public int CampaignId {  get; set; }
         public string PostUrl { get; set; }
         public int Likes { get; set; }
         public int Views { get; set; }

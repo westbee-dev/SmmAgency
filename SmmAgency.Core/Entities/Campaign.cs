@@ -13,6 +13,6 @@ namespace SmmAgency.Core.Entity
         public int TargetReelsCount {  get; set; }
         public int CompletedReelsCount { get; set; }
         public DateTime CreatedDate { get; set; }
-        public List<PostStats> PostStats { get; set; } = new List<PostStats>();
+        public List<PostStat> PostStats { get; set; } = new List<PostStat>();
     }
 }
