@@ -67,11 +67,11 @@ namespace SmmAgency.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCampaign(int id)
         {
-            var deletedCampaign = await _context.Businesses.FindAsync(id);
+            var deletedCampaign = await _context.Campaigns.FindAsync(id);
             if (deletedCampaign == null)
                 return NotFound();
 
-            _context.Businesses.Remove(deletedCampaign);
+            _context.Campaigns.Remove(deletedCampaign);
             await _context.SaveChangesAsync();
 
             return NoContent();

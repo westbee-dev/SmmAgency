@@ -37,7 +37,7 @@ namespace SmmAgency.Data.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     InstagramHandle = table.Column<string>(type: "text", nullable: false),
                     Category = table.Column<string>(type: "text", nullable: false),
-                    Status = table.Column<string>(type: "text", nullable: false)
+                    Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,11 +68,10 @@ namespace SmmAgency.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CampaginId = table.Column<int>(type: "integer", nullable: false),
+                    CampaignId = table.Column<int>(type: "integer", nullable: false),
                     PostUrl = table.Column<string>(type: "text", nullable: false),
                     Likes = table.Column<int>(type: "integer", nullable: false),
-                    Views = table.Column<int>(type: "integer", nullable: false),
-                    CampaignId = table.Column<int>(type: "integer", nullable: false)
+                    Views = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

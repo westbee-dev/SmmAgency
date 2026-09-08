@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SmmAgency.Core.Enums
+namespace SmmAgency.Core.Enums;
+
+public enum BusinessStatus
 {
-    internal class BusinessStatus
-    {
-    }
+    Подписание,
+    Активен,
+    Завершён
 }

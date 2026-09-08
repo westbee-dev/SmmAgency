@@ -13,7 +13,7 @@ namespace SmmAgency.Data
         public DbSet<Blogger> Bloggers { get; set; }
         public DbSet<Business> Businesses { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
-        public DbSet<PostStats> PostStats { get; set; }
+        public DbSet<PostStat> PostStats { get; set; }
 
 
     }

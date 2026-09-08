@@ -12,7 +12,7 @@ using SmmAgency.Data;
 namespace SmmAgency.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260904144153_InitialCreate")]
+    [Migration("20260908081212_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -72,9 +72,8 @@ namespace SmmAgency.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -113,16 +112,13 @@ namespace SmmAgency.Data.Migrations
                     b.ToTable("Campaigns");
                 });
 
-            modelBuilder.Entity("SmmAgency.Core.Entity.PostStats", b =>
+            modelBuilder.Entity("SmmAgency.Core.Entity.PostStat", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CampaginId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("CampaignId")
                         .HasColumnType("integer");
@@ -144,7 +140,7 @@ namespace SmmAgency.Data.Migrations
                     b.ToTable("PostStats");
                 });
 
-            modelBuilder.Entity("SmmAgency.Core.Entity.PostStats", b =>
+            modelBuilder.Entity("SmmAgency.Core.Entity.PostStat", b =>
                 {
                     b.HasOne("SmmAgency.Core.Entity.Campaign", "Campaign")
                         .WithMany("PostStats")
