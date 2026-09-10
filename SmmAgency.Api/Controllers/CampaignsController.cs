@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmmAgency.Core.Entity;
+using SmmAgency.Core.Enums;
 using SmmAgency.Data;
 
 namespace SmmAgency.Api.Controllers
@@ -39,6 +39,22 @@ namespace SmmAgency.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateCampaign(Campaign campaign)
         {
+            bool businessExists = await _context.Businesses.AnyAsync(b => b.Id == campaign.BusinessId);
+            if (!businessExists)
+            {
+                return BadRequest("Business не найден");
+            }
+
+            var business = await _context.Businesses.FindAsync(campaign.BusinessId);
+            if (business == null)
+            {
+                return NotFound();
+            }
+
+            campaign.CreatedDate = DateTime.UtcNow;
+            campaign.CompletedReelsCount = 0;
+            business.Status = BusinessStatus.InProgress;
+
             _context.Campaigns.Add(campaign);
             await _context.SaveChangesAsync();
 
@@ -55,10 +71,8 @@ namespace SmmAgency.Api.Controllers
             if (changeableCampaign == null)
                 return NotFound();
 
-            changeableCampaign.ManagerName = campaign.ManagerName;
             changeableCampaign.TargetReelsCount = campaign.TargetReelsCount;
             changeableCampaign.BusinessId = campaign.BusinessId;
-            changeableCampaign.BloggerId = campaign.BloggerId;
 
             await _context.SaveChangesAsync();
             return NoContent();
@@ -71,9 +85,36 @@ namespace SmmAgency.Api.Controllers
             if (deletedCampaign == null)
                 return NotFound();
 
-            _context.Campaigns.Remove(deletedCampaign);
-            await _context.SaveChangesAsync();
+            var business = await _context.Businesses.FindAsync(deletedCampaign.BusinessId);
+            if (business == null)
+                return NotFound();
 
+            var deletedCampaignId = deletedCampaign.Id;
+            _context.Campaigns.Remove(deletedCampaign);
+
+            var campaignsExists = await _context.Campaigns.AnyAsync(c => c.BusinessId == business.Id && c.Id != deletedCampaignId);
+
+            if (!campaignsExists)
+            {
+                business.Status = BusinessStatus.NoCampaigns;
+            }
+            else
+            {
+                var remainingCampaigns = await _context.Campaigns
+                    .Where(c => c.BusinessId == business.Id)
+                    .ToListAsync();
+                bool allCompleted = remainingCampaigns.All(c => c.TargetReelsCount >= c.CompletedReelsCount && c.Id != deletedCampaignId);
+                if (allCompleted) 
+                {
+                    business.Status = BusinessStatus.Completed;
+                }
+                else
+                {
+                    business.Status = BusinessStatus.InProgress;
+                }
+            }
+
+            await _context.SaveChangesAsync();
             return NoContent();
         }
     }

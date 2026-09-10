@@ -44,6 +44,9 @@ namespace SmmAgency.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("Bloggers");
@@ -85,9 +88,6 @@ namespace SmmAgency.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BloggerId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("BusinessId")
                         .HasColumnType("integer");
 
@@ -96,10 +96,6 @@ namespace SmmAgency.Data.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ManagerName")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<int>("TargetReelsCount")
                         .HasColumnType("integer");
@@ -117,11 +113,18 @@ namespace SmmAgency.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("BloggerId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("CampaignId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Likes")
                         .HasColumnType("integer");
+
+                    b.Property<string>("ManagerName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("PostUrl")
                         .IsRequired()

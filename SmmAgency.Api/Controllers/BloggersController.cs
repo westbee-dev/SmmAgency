@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SmmAgency.Core.Entity;
 using SmmAgency.Data;
+using SmmAgency.Core.Enums;
 
 namespace SmmAgency.Api.Controllers
 {
@@ -38,6 +39,7 @@ namespace SmmAgency.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateBlogger(Blogger blogger)
         {
+            blogger.Status = BloggerStatus.NoAnswer;
             _context.Bloggers.Add(blogger);
             await _context.SaveChangesAsync();
 
@@ -58,6 +60,7 @@ namespace SmmAgency.Api.Controllers
             changeableBlogger.InstagramUrl = blogger.InstagramUrl;
             changeableBlogger.FollowersCount = blogger.FollowersCount;
             changeableBlogger.EngagementRate = blogger.EngagementRate;
+            changeableBlogger.Status = blogger.Status;
 
             await _context.SaveChangesAsync();
             return NoContent();

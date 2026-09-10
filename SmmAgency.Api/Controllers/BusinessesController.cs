@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmmAgency.Core.Entity;
 using SmmAgency.Data;
+using SmmAgency.Core.Enums;
 
 namespace SmmAgency.Api.Controllers
 {
@@ -39,6 +39,7 @@ namespace SmmAgency.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateBusiness(Business business)
         {
+            business.Status = BusinessStatus.NoCampaigns;
             _context.Businesses.Add(business);
             await _context.SaveChangesAsync();
 
