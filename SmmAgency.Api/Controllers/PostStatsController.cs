@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmmAgency.Api.DTOs;
 using SmmAgency.Core.Entity;
 using SmmAgency.Core.Enums;
 using SmmAgency.Data;
@@ -11,20 +13,23 @@ namespace SmmAgency.Api.Controllers
     public class PostStatsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public PostStatsController(AppDbContext context)
+        public PostStatsController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<List<PostStat>> GetPostStats()
+        public async Task<List<PostStatResponseDto>> GetPostStats()
         {
-            return await _context.PostStats.ToListAsync();
+            var postStats = await _context.PostStats.ToListAsync();
+            return _mapper.Map<List<PostStatResponseDto>>(postStats);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PostStat>> GetPostStat(int id)
+        public async Task<ActionResult<PostStatResponseDto>> GetPostStat(int id)
         {
             var postStat = await _context.PostStats.FindAsync(id);
 
@@ -33,35 +38,43 @@ namespace SmmAgency.Api.Controllers
                 return NotFound();
             }
 
-            return postStat;
+            return _mapper.Map<PostStatResponseDto>(postStat);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreatePostStat(PostStat postStat)
+        public async Task<ActionResult<PostStatResponseDto>> CreatePostStat(CreatePostStatDto dto)
         {
-            bool campaignExists = await _context.Campaigns.AnyAsync(c => postStat.CampaignId == c.Id);
-            if (!campaignExists)
+            var postStat = _mapper.Map<PostStat>(dto);
+
+            var campaign = await _context.Campaigns.FindAsync(postStat.CampaignId);
+            if (campaign == null)
             {
                 return BadRequest("Campaign не найдена");
             }
 
-            bool bloggerExists = await _context.Bloggers.AnyAsync(b => postStat.BloggerId == b.Id);
-            if (!bloggerExists)
+            var blogger = await _context.Bloggers.FindAsync(postStat.BloggerId);
+            if (blogger == null)
             {
                 return BadRequest("Blogger не найден");
             }
 
-            var campaign = await _context.Campaigns.FindAsync(postStat.CampaignId);
-            campaign.CompletedReelsCount += 1;
+            var thereIsReels = await _context.PostStats.AnyAsync(p => p.BloggerId == postStat.BloggerId
+                && p.CampaignId == postStat.CampaignId);
+            if (thereIsReels)
+            {
+                return BadRequest("Blogger уже выложил рилс для этой Campaign");
+            }
 
-            var blogger = await _context.Bloggers.FindAsync(postStat.BloggerId);
+            campaign.CompletedReelsCount += 1;
             blogger.Status = BloggerStatus.Posted;
 
             _context.PostStats.Add(postStat);
             await UpdateBusinessStatus(campaign);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPostStat), new { id = postStat.Id }, postStat);
+            var responseDto = _mapper.Map<PostStatResponseDto>(postStat);
+
+            return CreatedAtAction(nameof(GetPostStat), new { id = postStat.Id }, responseDto);
         }
 
         private async Task UpdateBusinessStatus(Campaign campaign)
@@ -93,45 +106,53 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutPostStat(int id, PostStat postStat)
+        public async Task<ActionResult> PutPostStat(int id, UpdatePostStatDto dto)
         {
-            if (id != postStat.Id)
-                return BadRequest();
-
-            bool campaignExists = await _context.Campaigns.AnyAsync(c => postStat.CampaignId == c.Id);
+            bool campaignExists = await _context.Campaigns.AnyAsync(c => dto.CampaignId == c.Id);
             if (!campaignExists)
             {
                 return BadRequest("Campaign не найдена");
             }
 
-            bool bloggerExists = await _context.Bloggers.AnyAsync(b => postStat.BloggerId == b.Id);
+            bool bloggerExists = await _context.Bloggers.AnyAsync(b => dto.BloggerId == b.Id);
             if (!bloggerExists)
             {
                 return BadRequest("Blogger не найден");
-            }
+            } 
 
             var changeablePostStat = await _context.PostStats.FindAsync(id);
             if (changeablePostStat == null)
                 return NotFound();
 
-            bool bloggerIdIsUpdated = changeablePostStat.BloggerId != postStat.BloggerId;
-            bool campaignIdIsUpdated = changeablePostStat.CampaignId != postStat.CampaignId;
+            bool isUpdated = changeablePostStat.BloggerId != dto.BloggerId
+                || changeablePostStat.CampaignId != dto.CampaignId;
+            if (isUpdated)
+            {
+                bool thereIsReels = await _context.PostStats.AnyAsync(p => p.BloggerId == dto.BloggerId
+                    && p.CampaignId == dto.CampaignId && p.Id != id);
+                if (thereIsReels)
+                {
+                    return BadRequest("Blogger уже выложил рилс для этой Campaign");
+                }
+            }
+
+            bool bloggerIdIsUpdated = changeablePostStat.BloggerId != dto.BloggerId;
+            bool campaignIdIsUpdated = changeablePostStat.CampaignId != dto.CampaignId;
 
             if (bloggerIdIsUpdated)
             {
                 var oldBlogger = await _context.Bloggers.FindAsync(changeablePostStat.BloggerId);
-                var newBlogger = await _context.Bloggers.FindAsync(postStat.BloggerId);
+                var newBlogger = await _context.Bloggers.FindAsync(dto.BloggerId);
                 if (oldBlogger == null || newBlogger == null)
                     return BadRequest("Blogger не найден");
                 oldBlogger.Status = BloggerStatus.NoAnswer;
                 newBlogger.Status = BloggerStatus.Posted;
-                changeablePostStat.BloggerId = postStat.BloggerId;
             }
 
             if (campaignIdIsUpdated)
             {
                 var oldCampaign = await _context.Campaigns.FindAsync(changeablePostStat.CampaignId);
-                var newCampaign = await _context.Campaigns.FindAsync(postStat.CampaignId);
+                var newCampaign = await _context.Campaigns.FindAsync(dto.CampaignId);
                 if (oldCampaign == null || newCampaign == null)
                     return BadRequest("Campaign не найдена");
 
@@ -143,14 +164,9 @@ namespace SmmAgency.Api.Controllers
 
                 newCampaign.CompletedReelsCount++;
                 await UpdateBusinessStatus(newCampaign);
-
-                changeablePostStat.CampaignId = postStat.CampaignId;
             }
 
-            changeablePostStat.PostUrl = postStat.PostUrl;
-            changeablePostStat.Views = postStat.Views;
-            changeablePostStat.Likes = postStat.Likes;
-            changeablePostStat.ManagerName = postStat.ManagerName;
+            _mapper.Map(dto, changeablePostStat);
 
             await _context.SaveChangesAsync();
             return NoContent();
@@ -163,28 +179,21 @@ namespace SmmAgency.Api.Controllers
             if (deletedPostStat == null)
                 return NotFound();
 
-            bool campaignExists = await _context.Campaigns.AnyAsync(c => deletedPostStat.CampaignId == c.Id);
-            if (!campaignExists)
-            {
-                return BadRequest("Campaign не найдена");
-            }
-
-            bool bloggerExists = await _context.Bloggers.AnyAsync(b => deletedPostStat.BloggerId == b.Id);
-            if (!bloggerExists)
-            {
-                return BadRequest("Blogger не найден");
-            }
-
             var campaign = await _context.Campaigns.FindAsync(deletedPostStat.CampaignId);
-            if (campaign.CompletedReelsCount > 0)
+            if (campaign != null)
             {
-                campaign.CompletedReelsCount--;
+                if (campaign.CompletedReelsCount > 0)
+                {
+                    campaign.CompletedReelsCount--;
+                }
+                await UpdateBusinessStatus(campaign);
             }
+
             var blogger = await _context.Bloggers.FindAsync(deletedPostStat.BloggerId);
-            blogger.Status = BloggerStatus.NoAnswer;
+            if (blogger != null)
+                blogger.Status = BloggerStatus.NoAnswer;
 
             _context.PostStats.Remove(deletedPostStat);
-            await UpdateBusinessStatus(campaign);
             await _context.SaveChangesAsync();
 
             return NoContent();

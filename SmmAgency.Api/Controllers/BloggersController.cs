@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using SmmAgency.Core.Entity;
 using SmmAgency.Data;
 using SmmAgency.Core.Enums;
+using AutoMapper;
+using SmmAgency.Api.DTOs;
 
 namespace SmmAgency.Api.Controllers
 {
@@ -11,20 +13,23 @@ namespace SmmAgency.Api.Controllers
     public class BloggersController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public BloggersController(AppDbContext context)
+        public BloggersController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<List<Blogger>> GetBloggers()
+        public async Task<List<BloggerResponseDto>> GetBloggers()
         {
-            return await _context.Bloggers.ToListAsync();
+            var bloggers = await _context.Bloggers.ToListAsync();
+            return _mapper.Map<List<BloggerResponseDto>>(bloggers);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Blogger>> GetBlogger(int id)
+        public async Task<ActionResult<BloggerResponseDto>> GetBlogger(int id)
         {
             var blogger = await _context.Bloggers.FindAsync(id);
 
@@ -33,34 +38,30 @@ namespace SmmAgency.Api.Controllers
                 return NotFound();
             }
 
-            return blogger;
+            return _mapper.Map<BloggerResponseDto>(blogger);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateBlogger(Blogger blogger)
+        public async Task<ActionResult<BloggerResponseDto>> CreateBlogger(CreateBloggerDto dto)
         {
+            var blogger = _mapper.Map<Blogger>(dto);
             blogger.Status = BloggerStatus.NoAnswer;
             _context.Bloggers.Add(blogger);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetBlogger), new { id = blogger.Id }, blogger);
+            var responseDto = _mapper.Map<BloggerResponseDto>(blogger);
+
+            return CreatedAtAction(nameof(GetBlogger), new { id = blogger.Id }, responseDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutBlogger(int id, Blogger blogger)
+        public async Task<ActionResult> PutBlogger(int id, UpdateBloggerDto dto)
         {
-            if (id != blogger.Id)
-                return BadRequest();
-
             var changeableBlogger = await _context.Bloggers.FindAsync(id);
             if (changeableBlogger == null)
                 return NotFound();
-
-            changeableBlogger.InstagramHandle = blogger.InstagramHandle;
-            changeableBlogger.InstagramUrl = blogger.InstagramUrl;
-            changeableBlogger.FollowersCount = blogger.FollowersCount;
-            changeableBlogger.EngagementRate = blogger.EngagementRate;
-            changeableBlogger.Status = blogger.Status;
+            
+            _mapper.Map(dto, changeableBlogger);
 
             await _context.SaveChangesAsync();
             return NoContent();

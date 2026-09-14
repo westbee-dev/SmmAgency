@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using SmmAgency.Core.Entity;
 using SmmAgency.Data;
 using SmmAgency.Core.Enums;
+using AutoMapper;
+using SmmAgency.Api.DTOs;
 
 namespace SmmAgency.Api.Controllers
 {
@@ -11,20 +13,23 @@ namespace SmmAgency.Api.Controllers
     public class BusinessesController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public BusinessesController(AppDbContext context)
+        public BusinessesController(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<List<Business>> GetBusinesses()
+        public async Task<List<BusinessResponseDto>> GetBusinesses()
         {
-            return await _context.Businesses.ToListAsync();
+            var businesses = await _context.Businesses.ToListAsync();
+            return _mapper.Map<List<BusinessResponseDto>>(businesses);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Business>> GetBusiness(int id)
+        public async Task<ActionResult<BusinessResponseDto>> GetBusiness(int id)
         {
             var business = await _context.Businesses.FindAsync(id);
 
@@ -33,33 +38,31 @@ namespace SmmAgency.Api.Controllers
                 return NotFound();
             }
 
-            return business;
+            return _mapper.Map<BusinessResponseDto>(business);
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateBusiness(Business business)
+        public async Task<ActionResult<BusinessResponseDto>> CreateBusiness(CreateBusinessDto dto)
         {
+            var business = _mapper.Map<Business>(dto);
             business.Status = BusinessStatus.NoCampaigns;
+
             _context.Businesses.Add(business);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetBusiness), new { id = business.Id }, business);
+            var responseDto = _mapper.Map<BusinessResponseDto>(business);
+
+            return CreatedAtAction(nameof(GetBusiness), new { id = business.Id }, responseDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutBusiness(int id, Business business)
+        public async Task<ActionResult> PutBusiness(int id, UpdateBusinessDto dto)
         {
-            if (id != business.Id)
-                return BadRequest();
-
             var changeableBusiness = await _context.Businesses.FindAsync(id);
             if (changeableBusiness == null)
                 return NotFound();
 
-            changeableBusiness.Name = business.Name;
-            changeableBusiness.InstagramHandle = business.InstagramHandle;
-            changeableBusiness.Category = business.Category;
-            changeableBusiness.Status = business.Status;
+            _mapper.Map(dto, changeableBusiness);
 
             await _context.SaveChangesAsync();
             return NoContent();

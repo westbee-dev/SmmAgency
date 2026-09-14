@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SmmAgency.Api.DTOs;
 using SmmAgency.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,9 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add services to the container.
 builder.Services.AddControllers();
-
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
