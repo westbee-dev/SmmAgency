@@ -1,5 +1,8 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using SmmAgency.Api.DTOs;
+using SmmAgency.Api.Validators;
 using SmmAgency.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +12,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddValidatorsFromAssemblyContaining<CreateCampaignDtoValidator>();
+builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
