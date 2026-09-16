@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using SmmAgency.Api.DTOs;
-using static System.Uri;
 
 namespace SmmAgency.Api.Validators
 {
@@ -30,7 +29,7 @@ namespace SmmAgency.Api.Validators
 
             RuleFor(x => x.InstagramUrl).
                 Must(u => Uri.TryCreate(u, UriKind.Absolute, out _)).
-                WithMessage("Неккоректный формат url!");
+                WithMessage("Некоректный формат url!");
         }
     }
 }
