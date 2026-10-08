@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmmAgency.Api.DTOs;
@@ -8,6 +9,7 @@ using SmmAgency.Data;
 
 namespace SmmAgency.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PostStatsController : ControllerBase

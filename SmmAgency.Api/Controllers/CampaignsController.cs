@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmmAgency.Api.DTOs;
 using SmmAgency.Core.Entity;
 using SmmAgency.Core.Enums;
 using SmmAgency.Data;
-using AutoMapper;
-using SmmAgency.Api.DTOs;
 
 namespace SmmAgency.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CampaignsController : ControllerBase
