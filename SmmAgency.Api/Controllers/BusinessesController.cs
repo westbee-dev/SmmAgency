@@ -9,7 +9,7 @@ using SmmAgency.Data;
 
 namespace SmmAgency.Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Manager")]
     [Route("api/[controller]")]
     [ApiController]
     public class BusinessesController : ControllerBase
@@ -24,6 +24,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<List<BusinessResponseDto>> GetBusinesses()
         {
             var businesses = await _context.Businesses.ToListAsync();
@@ -31,6 +32,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<BusinessResponseDto>> GetBusiness(int id)
         {
             var business = await _context.Businesses.FindAsync(id);
@@ -44,6 +46,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<BusinessResponseDto>> CreateBusiness(CreateBusinessDto dto)
         {
             var business = _mapper.Map<Business>(dto);
@@ -58,6 +61,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> PutBusiness(int id, UpdateBusinessDto dto)
         {
             var changeableBusiness = await _context.Businesses.FindAsync(id);
@@ -71,6 +75,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteBusiness(int id)
         {
             var deletedBusiness = await _context.Businesses.FindAsync(id);

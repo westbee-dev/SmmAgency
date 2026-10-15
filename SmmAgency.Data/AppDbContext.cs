@@ -1,6 +1,7 @@
 ﻿using System;
 using SmmAgency.Core.Entity;
 using Microsoft.EntityFrameworkCore;
+using SmmAgency.Core.Entities;
 
 namespace SmmAgency.Data
 {
@@ -14,7 +15,6 @@ namespace SmmAgency.Data
         public DbSet<Business> Businesses { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<PostStat> PostStats { get; set; }
-
-
+        public DbSet<User> Users { get; set; }
     }
 }

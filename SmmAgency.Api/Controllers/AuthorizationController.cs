@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BCrypt.Net;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SmmAgency.Api.DTOs;
+using SmmAgency.Core.Entities;
+using SmmAgency.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -13,26 +18,53 @@ namespace SmmAgency.Api.Controllers
     public class AuthorizationController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly AppDbContext _context;
 
-        public AuthorizationController(IConfiguration configuration)
+        public AuthorizationController(IConfiguration configuration
+            , AppDbContext context)
         {
             _configuration = configuration;
+            _context = context;
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult Login([FromBody] LoginRequestDto loginRequest)
+        [HttpPost("registration")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> Registration([FromBody] RegistrationDto registrationDto)
         {
-            if (loginRequest.Username != "admin"
-                || loginRequest.Password != "adminPassword111")
+            var loginExists = await _context.Users.AnyAsync(u => u.Login == registrationDto.Login);
+            if (loginExists)
+                return BadRequest("Логин уже существует! Войдите в существующий аккаунт или смените логин");
+            var passwordHash = BCrypt.Net.BCrypt.HashPassword(registrationDto.Password);
+            var user = new User
             {
-                return Unauthorized("Доступ ограничен!");
+                Login = registrationDto.Login,
+                PasswordHash = passwordHash,
+                Role = registrationDto.Role
+            };
+
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+
+            return Ok("Пользователь успешно создан!");
+        }
+
+        [HttpPost("authorization")]
+        [AllowAnonymous]
+        public async Task<ActionResult> Authorization([FromBody] AuthorizationDto authorizationDto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Login == authorizationDto.Login);
+            if (user == null)
+                return Unauthorized("Неверный логин или пароль");
+
+            if (!BCrypt.Net.BCrypt.Verify(authorizationDto.Password, user.PasswordHash))
+            {
+                return Unauthorized("Неверный логин или пароль");
             }
 
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, "admin"),
-                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim(ClaimTypes.Name, user.Login),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 
             var secretKey = _configuration["JwtSettings:SecretKey"];

@@ -9,7 +9,7 @@ using SmmAgency.Data;
 
 namespace SmmAgency.Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Manager")]
     [Route("api/[controller]")]
     [ApiController]
     public class PostStatsController : ControllerBase
@@ -24,6 +24,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<List<PostStatResponseDto>> GetPostStats()
         {
             var postStats = await _context.PostStats.ToListAsync();
@@ -31,6 +32,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<PostStatResponseDto>> GetPostStat(int id)
         {
             var postStat = await _context.PostStats.FindAsync(id);
@@ -44,6 +46,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<PostStatResponseDto>> CreatePostStat(CreatePostStatDto dto)
         {
             var postStat = _mapper.Map<PostStat>(dto);
@@ -108,6 +111,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> PutPostStat(int id, UpdatePostStatDto dto)
         {
             bool campaignExists = await _context.Campaigns.AnyAsync(c => dto.CampaignId == c.Id);
@@ -175,6 +179,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> DeletePostStat(int id)
         {
             var deletedPostStat = await _context.PostStats.FindAsync(id);

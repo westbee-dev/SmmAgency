@@ -9,7 +9,7 @@ using SmmAgency.Data;
 
 namespace SmmAgency.Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Manager")]
     [Route("api/[controller]")]
     [ApiController]
     public class BloggersController : ControllerBase
@@ -24,6 +24,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<List<BloggerResponseDto>> GetBloggers()
         {
             var bloggers = await _context.Bloggers.ToListAsync();
@@ -31,6 +32,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<BloggerResponseDto>> GetBlogger(int id)
         {
             var blogger = await _context.Bloggers.FindAsync(id);
@@ -44,6 +46,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<BloggerResponseDto>> CreateBlogger(CreateBloggerDto dto)
         {
             var blogger = _mapper.Map<Blogger>(dto);
@@ -57,6 +60,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult> PutBlogger(int id, UpdateBloggerDto dto)
         {
             var changeableBlogger = await _context.Bloggers.FindAsync(id);
@@ -70,6 +74,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteBlogger(int id)
         {
             var deletedBlogger = await _context.Bloggers.FindAsync(id);

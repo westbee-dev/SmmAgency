@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using SmmAgency.Api.DTOs;
 using SmmAgency.Api.Validators;
+using SmmAgency.Core.Entities;
+using SmmAgency.Core.Enums;
 using SmmAgency.Data;
 using System.Text;
 
@@ -57,6 +59,30 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    if (!context.Users.Any())
+    {
+        var adminLogin = app.Configuration["DefaultAdmin:Login"];
+        var adminPassword = app.Configuration["DefaultAdmin:Password"];
+        if (string.IsNullOrWhiteSpace(adminLogin)
+            || string.IsNullOrWhiteSpace(adminPassword))
+        {
+            throw new InvalidOperationException(
+                "Не заданы данные администратора по умолчанию в appsettings.json");
+        }
+        context.Users.Add(new User
+        {
+            Login = adminLogin,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(adminPassword),
+            Role = UserRole.Admin
+        });
+        context.SaveChanges();
+    }
+}
 
 if (app.Environment.IsDevelopment())
 {

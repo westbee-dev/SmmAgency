@@ -9,7 +9,7 @@ using SmmAgency.Data;
 
 namespace SmmAgency.Api.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin,Manager")]
     [Route("api/[controller]")]
     [ApiController]
     public class CampaignsController : ControllerBase
@@ -23,6 +23,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<List<CampaignResponseDto>> GetCampaigns()
         {
             var campaigns = await _context.Campaigns.ToListAsync();
@@ -30,6 +31,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<CampaignResponseDto>> GetCampaign(int id)
         {
             var campaign = await _context.Campaigns.FindAsync(id);
@@ -43,6 +45,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CampaignResponseDto>> CreateCampaign(CreateCampaignDto dto)
         {
             var campaign = _mapper.Map<Campaign>(dto);
@@ -65,6 +68,7 @@ namespace SmmAgency.Api.Controllers
             return CreatedAtAction(nameof(GetCampaign), new { id = campaign.Id }, responseDto);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<ActionResult> PutCampaign(int id, UpdateCampaignDto dto)
         {
@@ -77,6 +81,7 @@ namespace SmmAgency.Api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCampaign(int id)
         {
