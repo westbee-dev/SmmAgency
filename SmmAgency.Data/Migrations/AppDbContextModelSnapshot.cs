@@ -73,6 +73,9 @@ namespace SmmAgency.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("InstagramHandle")
+                        .IsUnique();
+
                     b.ToTable("Bloggers");
                 });
 
@@ -100,6 +103,9 @@ namespace SmmAgency.Data.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("InstagramHandle")
+                        .IsUnique();
 
                     b.ToTable("Businesses");
                 });

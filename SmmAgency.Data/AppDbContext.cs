@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using SmmAgency.Core.Entity;
 using Microsoft.EntityFrameworkCore;
 using SmmAgency.Core.Entities;
@@ -16,5 +16,18 @@ namespace SmmAgency.Data
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<PostStat> PostStats { get; set; }
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Blogger>()
+                .HasIndex(b => b.InstagramHandle)
+                .IsUnique();
+
+            modelBuilder.Entity<Business>()
+                .HasIndex(b => b.InstagramHandle)
+                .IsUnique();
+        }
     }
 }

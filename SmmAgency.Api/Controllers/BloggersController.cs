@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmmAgency.Api.Common;
 using SmmAgency.Api.DTOs;
 using SmmAgency.Core.Entity;
 using SmmAgency.Core.Enums;
@@ -25,10 +26,10 @@ namespace SmmAgency.Api.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<List<BloggerResponseDto>> GetBloggers()
+        public async Task<ActionResult<PagedResult<BloggerResponseDto>>> GetBloggers(int page = 1, int pageSize = 10)
         {
-            var bloggers = await _context.Bloggers.ToListAsync();
-            return _mapper.Map<List<BloggerResponseDto>>(bloggers);
+            var paged = await _context.Bloggers.ToPagedResultAsync(x => x.Id, page, pageSize);
+            return Ok(paged.MapItems(x => _mapper.Map<BloggerResponseDto>(x)));
         }
 
         [HttpGet("{id}")]
@@ -49,6 +50,12 @@ namespace SmmAgency.Api.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<BloggerResponseDto>> CreateBlogger(CreateBloggerDto dto)
         {
+            var handleExists = await _context.Bloggers.AnyAsync(b => b.InstagramHandle == dto.InstagramHandle);
+            if (handleExists)
+            {
+                return BadRequest("Блогер с таким InstagramHandle уже существует");
+            }
+
             var blogger = _mapper.Map<Blogger>(dto);
             blogger.Status = BloggerStatus.NoAnswer;
             _context.Bloggers.Add(blogger);
@@ -66,6 +73,12 @@ namespace SmmAgency.Api.Controllers
             var changeableBlogger = await _context.Bloggers.FindAsync(id);
             if (changeableBlogger == null)
                 return NotFound();
+
+            var handleExists = await _context.Bloggers.AnyAsync(b => b.InstagramHandle == dto.InstagramHandle && b.Id != id);
+            if (handleExists)
+            {
+                return BadRequest("Блогер с таким InstagramHandle уже существует");
+            }
             
             _mapper.Map(dto, changeableBlogger);
 

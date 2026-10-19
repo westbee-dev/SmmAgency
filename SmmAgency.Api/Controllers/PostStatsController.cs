@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmmAgency.Api.Common;
 using SmmAgency.Api.DTOs;
 using SmmAgency.Core.Entity;
 using SmmAgency.Core.Enums;
@@ -25,10 +26,10 @@ namespace SmmAgency.Api.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<List<PostStatResponseDto>> GetPostStats()
+        public async Task<ActionResult<PagedResult<PostStatResponseDto>>> GetPostStats(int page = 1, int pageSize = 10)
         {
-            var postStats = await _context.PostStats.ToListAsync();
-            return _mapper.Map<List<PostStatResponseDto>>(postStats);
+            var paged = await _context.PostStats.ToPagedResultAsync(x => x.Id, page, pageSize);
+            return Ok(paged.MapItems(x => _mapper.Map<PostStatResponseDto>(x)));
         }
 
         [HttpGet("{id}")]
@@ -179,7 +180,7 @@ namespace SmmAgency.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin,Manager")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeletePostStat(int id)
         {
             var deletedPostStat = await _context.PostStats.FindAsync(id);

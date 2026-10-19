@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmmAgency.Api.Common;
 using SmmAgency.Api.DTOs;
 using SmmAgency.Core.Entity;
 using SmmAgency.Core.Enums;
@@ -25,10 +26,10 @@ namespace SmmAgency.Api.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<List<BusinessResponseDto>> GetBusinesses()
+        public async Task<ActionResult<PagedResult<BusinessResponseDto>>> GetBusinesses(int page = 1, int pageSize = 10)
         {
-            var businesses = await _context.Businesses.ToListAsync();
-            return _mapper.Map<List<BusinessResponseDto>>(businesses);
+            var paged = await _context.Businesses.ToPagedResultAsync(x => x.Id, page, pageSize);
+            return Ok(paged.MapItems(x => _mapper.Map<BusinessResponseDto>(x)));
         }
 
         [HttpGet("{id}")]
@@ -49,6 +50,12 @@ namespace SmmAgency.Api.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public async Task<ActionResult<BusinessResponseDto>> CreateBusiness(CreateBusinessDto dto)
         {
+            var handleExists = await _context.Businesses.AnyAsync(b => b.InstagramHandle == dto.InstagramHandle);
+            if (handleExists)
+            {
+                return BadRequest("Бизнес с таким InstagramHandle уже существует");
+            }
+
             var business = _mapper.Map<Business>(dto);
             business.Status = BusinessStatus.NoCampaigns;
 
@@ -67,6 +74,12 @@ namespace SmmAgency.Api.Controllers
             var changeableBusiness = await _context.Businesses.FindAsync(id);
             if (changeableBusiness == null)
                 return NotFound();
+
+            var handleExists = await _context.Businesses.AnyAsync(b => b.InstagramHandle == dto.InstagramHandle && b.Id != id);
+            if (handleExists)
+            {
+                return BadRequest("Бизнес с таким InstagramHandle уже существует");
+            }
 
             _mapper.Map(dto, changeableBusiness);
 

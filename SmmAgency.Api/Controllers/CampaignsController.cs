@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmmAgency.Api.Common;
 using SmmAgency.Api.DTOs;
 using SmmAgency.Core.Entity;
 using SmmAgency.Core.Enums;
@@ -24,10 +25,10 @@ namespace SmmAgency.Api.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<List<CampaignResponseDto>> GetCampaigns()
+        public async Task<ActionResult<PagedResult<CampaignResponseDto>>> GetCampaigns(int page = 1, int pageSize = 10)
         {
-            var campaigns = await _context.Campaigns.ToListAsync();
-            return _mapper.Map<List<CampaignResponseDto>>(campaigns);
+            var paged = await _context.Campaigns.ToPagedResultAsync(x => x.Id, page, pageSize);
+            return Ok(paged.MapItems(x => _mapper.Map<CampaignResponseDto>(x)));
         }
 
         [HttpGet("{id}")]
@@ -54,6 +55,11 @@ namespace SmmAgency.Api.Controllers
             if (business == null)
             {
                 return BadRequest("Business не найден");
+            }
+
+            if (business.Status != BusinessStatus.NoCampaigns)
+            {
+                return BadRequest("Нельзя создать кампанию для бизнеса со статусом InProgress или Completed. Создание разрешено только со статусом NoCampaigns.");
             }
 
             campaign.CreatedDate = DateTime.UtcNow;

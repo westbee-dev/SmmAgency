@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using SmmAgency.Api.DTOs;
+using SmmAgency.Api.Middlewares;
 using SmmAgency.Api.Validators;
 using SmmAgency.Core.Entities;
 using SmmAgency.Core.Enums;
@@ -59,6 +60,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {
