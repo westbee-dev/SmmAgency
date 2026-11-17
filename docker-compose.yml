@@ -1,0 +1,79 @@
+services:
+  # ============================================================================
+  # 1. База данных PostgreSQL
+  # ============================================================================
+  db:
+    image: postgres:16-alpine
+    container_name: smm_agency_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-smm_agency}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-smm_agency}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - smm_network
+
+  # ============================================================================
+  # 2. Бэкенд API (.NET 10 Web API)
+  # ============================================================================
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: smm_agency_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=${POSTGRES_DB:-smm_agency};Username=${POSTGRES_USER:-postgres};Password=${POSTGRES_PASSWORD:-postgres}
+      - JwtSettings__SecretKey=${JWT_SECRET_KEY:-super_secret_jwt_key_dev_minimum_32_characters_long}
+      - JwtSettings__Issuer=SmmAgencyApi
+      - JwtSettings__Audience=SmmAgencyClient
+      - DefaultAdmin__Login=${DEFAULT_ADMIN_LOGIN:-admin}
+      - DefaultAdmin__Password=${DEFAULT_ADMIN_PASSWORD:-Admin123!}
+    ports:
+      - "5000:5000"
+    networks:
+      - smm_network
+
+  # ============================================================================
+  # 3. Фронтенд (Nginx + Vanilla JS / Tailwind / Vite)
+  # ============================================================================
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: smm_agency_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    networks:
+      - smm_network
+
+# ==============================================================================
+# Постоянные тома (Volumes) для сохранения данных БД между перезапусками
+# ==============================================================================
+volumes:
+  postgres_data:
+    driver: local
+
+# ==============================================================================
+# Общая внутренняя сеть Docker (DNS-резолвинг по именам сервисов)
+# ==============================================================================
+networks:
+  smm_network:
+    driver: bridge

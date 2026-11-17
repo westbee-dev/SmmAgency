@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Блогеры — SmmAgency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Outfit', 'system-ui', 'sans-serif'],
+              display: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+          },
+        },
+      };
+    </script>
+    <script>
+      (function() {
+        const saved = localStorage.getItem('smm_theme');
+        if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+    <link rel="stylesheet" href="./src/css/styles.css" />
+  </head>
+  <body class="liquid-canvas min-h-screen md:h-screen md:overflow-hidden text-slate-900 dark:text-slate-100 antialiased font-sans flex flex-col justify-center p-2 sm:p-4 lg:p-6 transition-colors duration-200">
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto w-full md:h-[calc(100vh-3rem)] md:max-h-[860px] md:min-h-[640px] flex flex-col rounded-3xl border border-white/95 dark:border-slate-800/80 bg-white/70 dark:bg-[#11151f]/90 backdrop-blur-2xl shadow-[0_20px_50px_rgba(15,23,42,0.05),inset_0_1px_1px_rgba(255,255,255,1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transition-all duration-300">
+      <!-- Liquid Glass Top Control Strip -->
+      <div class="px-6 py-3 shrink-0 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200/70 dark:border-slate-800/80 bg-white/50 dark:bg-slate-900/60 backdrop-blur-xl text-xs text-slate-700 dark:text-slate-300">
+        <div class="flex items-center gap-2.5">
+          <span class="font-display font-bold text-sm tracking-tight text-slate-900 dark:text-white">SmmAgency</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <!-- Current Tab Name Badge -->
+          <div class="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-indigo-50/80 dark:bg-indigo-950/50 border border-indigo-200/70 dark:border-indigo-800/60">
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400"></span>
+            <span class="text-xs font-semibold text-indigo-900 dark:text-indigo-200 font-display">Блогеры</span>
+          </div>
+
+          <span class="text-slate-300 dark:text-slate-700">|</span>
+
+          <!-- Dark/Light Theme Toggle (Icon Only) -->
+          <button
+            type="button"
+            data-theme-toggle
+            class="flex items-center justify-center w-8 h-8 rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white/80 dark:bg-slate-800/80 hover:bg-slate-100/90 dark:hover:bg-slate-700/70 hover:scale-105 active:scale-95 transition-all shadow-2xs cursor-pointer select-none"
+            title="Переключить тему оформления"
+          >
+            <span class="theme-icon-container">
+              <img src="/assets/images/theme-sun.png" alt="Light theme" class="theme-icon-sun" />
+              <img src="/assets/images/theme-moon.png" alt="Dark theme" class="theme-icon-moon" />
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main SaaS Workspace Container -->
+      <div class="flex-1 min-h-0 flex flex-col md:flex-row overflow-hidden">
+        <!-- Frosted Glass Sidebar (260px) -->
+        <aside class="w-full md:w-64 h-full flex flex-col justify-between shrink-0 border-r border-slate-200/70 dark:border-slate-800/80 bg-white/45 dark:bg-[#0e121b]/80 backdrop-blur-2xl text-slate-700 dark:text-slate-300 overflow-y-auto">
+          <div>
+            <!-- Logo -->
+            <div class="px-6 py-5 border-b border-slate-200/60 dark:border-slate-800/80 bg-white/30 dark:bg-white/5 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-display font-bold text-sm shadow-xs">
+                SM
+              </div>
+              <div>
+                <div class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white leading-none">
+                  SmmAgency
+                </div>
+                <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-medium">Инфлюенс-маркетинг</div>
+              </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-3 space-y-1">
+              <a
+                href="/businesses.html"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/50 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 dark:text-slate-500"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                  <span>Бизнесы</span>
+                </div>
+              </a>
+
+              <a
+                href="/bloggers.html"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-white dark:bg-[#19202f] text-indigo-700 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700/80 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600 dark:text-indigo-400"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  <span>Блогеры</span>
+                </div>
+                <span id="count-bloggers" class="text-[11px] font-mono tabular-nums text-slate-400 dark:text-slate-500">...</span>
+              </a>
+
+              <a
+                href="/campaigns.html"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/50 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 dark:text-slate-500"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.934a.5.5 0 0 0-.777-.416L16 11"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+                  <span>Кампании</span>
+                </div>
+              </a>
+
+              <a
+                href="/post-stats.html"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/50 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 dark:text-slate-500"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
+                  <span>Статистика рилсов</span>
+                </div>
+              </a>
+
+              <a
+                href="/guide.html"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/50 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 dark:text-slate-500"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  <span>База знаний</span>
+                </div>
+                <span class="text-[10px] uppercase font-bold px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 rounded-md">
+                  Гайд
+                </span>
+              </a>
+
+              <!-- ADMIN ONLY -->
+              <a
+                href="/register.html"
+                data-role="admin"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-indigo-700 dark:text-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/40 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                  <span>Новый сотрудник</span>
+                </div>
+                <span class="text-[10px] uppercase font-bold px-1.5 py-0.5 bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 rounded-md">
+                  Admin
+                </span>
+              </a>
+            </nav>
+          </div>
+
+          <!-- User Profile Info Footer -->
+          <div class="p-4 border-t border-slate-200/70 dark:border-slate-800/80 bg-white/40 dark:bg-[#0e121b]/90 backdrop-blur-xl">
+            <div class="flex items-center justify-between">
+              <div class="overflow-hidden">
+                <div id="user-login-display" class="text-xs font-bold text-slate-900 dark:text-white truncate font-display">...</div>
+                <div class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-0.5">
+                  <span id="user-role-dot" class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
+                  <span id="user-role-name">Загрузка...</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                id="logout-btn"
+                class="p-1.5 rounded-xl text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-white dark:hover:bg-slate-800 shadow-2xs transition-all cursor-pointer"
+                title="Выйти"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Content Viewport -->
+        <main class="flex-1 min-w-0 h-full overflow-y-auto p-6 bg-slate-50/40 dark:bg-[#11151f]/50">
+          <div class="space-y-6">
+            <!-- Topbar inside Viewport -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-200/70 dark:border-slate-800">
+              <div>
+                <div class="flex items-center gap-2 text-xs text-slate-400 dark:text-slate-500">
+                  <span>Агентство</span>
+                  <span aria-hidden="true">/</span>
+                  <span class="font-medium text-slate-700 dark:text-slate-300">База инфлюенсеров</span>
+                </div>
+                <h1 class="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-1">
+                  Блогеры
+                </h1>
+              </div>
+
+              <!-- Primary Action Button -->
+              <div class="flex items-center gap-3">
+                <button
+                  type="button"
+                  id="btn-create-blogger"
+                  class="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:border dark:border-slate-700 active:scale-[0.98] rounded-xl shadow-xs transition-all whitespace-nowrap cursor-pointer"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                  <span>Добавить блогера</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Filters & Search Toolbar -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <div class="relative flex-1 max-w-md">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div>
+                <input
+                  type="text"
+                  id="bloggers-search-input"
+                  placeholder="Поиск по @аккаунту, ссылке..."
+                  class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-slate-200/90 dark:border-slate-700/80 bg-white/90 dark:bg-[#151a26] text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 shadow-2xs transition-all"
+                />
+              </div>
+
+              <div class="flex items-center gap-2">
+                <label for="bloggers-status-filter" class="text-xs font-medium text-slate-500 dark:text-slate-400 whitespace-nowrap hidden sm:inline">
+                  Статус:
+                </label>
+                <select
+                  id="bloggers-status-filter"
+                  class="px-3.5 py-2 text-xs rounded-xl border border-slate-200/90 dark:border-slate-700/80 bg-white/90 dark:bg-[#151a26] text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 shadow-2xs transition-all cursor-pointer"
+                >
+                  <option value="">Все статусы</option>
+                  <option value="0">Нет ответа (NoAnswer)</option>
+                  <option value="1">Согласился (Agreed)</option>
+                  <option value="2">Отказался (Disagreed)</option>
+                  <option value="3">Опубликовал (Posted)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="rounded-2xl border border-slate-200/80 dark:border-slate-800/90 bg-white/80 dark:bg-[#141925]/90 backdrop-blur-xl overflow-hidden shadow-xs">
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs min-w-[700px]">
+                  <thead class="border-b border-slate-200/70 dark:border-slate-800 text-[11px] font-semibold text-slate-700 dark:text-slate-400 uppercase tracking-wider bg-slate-50/70 dark:bg-[#181f2e]/80 backdrop-blur-md">
+                    <tr>
+                      <th class="px-5 py-3.5">ID</th>
+                      <th class="px-5 py-3.5">Instagram Аккаунт</th>
+                      <th class="px-5 py-3.5 text-right">Подписчики</th>
+                      <th class="px-5 py-3.5 text-right">Вовлеченность (ER)</th>
+                      <th class="px-5 py-3.5">Статус</th>
+                      <th class="px-5 py-3.5 text-right">Действия</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bloggers-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/60">
+                    <!-- Injected via bloggersPage.js -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination Container -->
+              <div id="pagination-container"></div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- MODAL: Blogger Create / Edit -->
+    <div
+      id="blogger-modal"
+      class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="fixed inset-0 bg-slate-900/25 dark:bg-slate-950/70 backdrop-blur-sm transition-opacity" data-modal-backdrop></div>
+
+      <div class="relative w-full max-w-lg rounded-2xl bg-white/95 dark:bg-[#131824] backdrop-blur-2xl border border-white/95 dark:border-slate-700/80 shadow-[0_20px_50px_rgba(15,23,42,0.1),inset_0_1px_1px_rgba(255,255,255,1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transform transition-all z-10 text-slate-900 dark:text-slate-100">
+        <div class="flex items-start justify-between px-6 py-4.5 border-b border-slate-200/60 dark:border-slate-800 bg-white/50 dark:bg-slate-900/40">
+          <div>
+            <h3 id="blogger-modal-title" class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white">
+              Новый блогер в базе
+            </h3>
+            <p id="blogger-modal-subtitle" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Инфлюенсер создается со стартовым статусом "Нет ответа"
+            </p>
+          </div>
+          <button
+            type="button"
+            class="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100/70 dark:hover:bg-slate-800/70 rounded-xl transition-colors cursor-pointer"
+            data-modal-close
+            title="Закрыть"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="px-6 py-5">
+          <form id="blogger-form" class="space-y-4">
+            <div id="blogger-general-error" class="hidden p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 text-rose-700 dark:text-rose-200 text-xs rounded-xl flex items-start gap-2">
+            </div>
+
+            <div>
+              <label for="blogger-instagramHandle" class="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-300 mb-1">
+                Instagram Handle (начинается с @) *
+              </label>
+              <input
+                type="text"
+                id="blogger-instagramHandle"
+                name="instagramHandle"
+                required
+                value="@"
+                placeholder="@influencer"
+                class="w-full px-3.5 py-2 text-xs font-mono rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/90 dark:bg-[#10141f] text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+              />
+              <span id="error-instagramHandle" class="field-error block text-[11px] text-rose-600 mt-1"></span>
+            </div>
+
+            <div>
+              <label for="blogger-instagramUrl" class="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-300 mb-1">
+                Ссылка на профиль (Instagram URL) *
+              </label>
+              <input
+                type="url"
+                id="blogger-instagramUrl"
+                name="instagramUrl"
+                required
+                value="https://instagram.com/"
+                placeholder="https://instagram.com/influencer"
+                class="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/90 dark:bg-[#10141f] text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+              />
+              <span id="error-instagramUrl" class="field-error block text-[11px] text-rose-600 mt-1"></span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="blogger-followersCount" class="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-300 mb-1">
+                  Подписчики (> 0) *
+                </label>
+                <input
+                  type="number"
+                  id="blogger-followersCount"
+                  name="followersCount"
+                  min="1"
+                  required
+                  value="50000"
+                  class="w-full px-3.5 py-2 text-xs font-mono rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/90 dark:bg-[#10141f] text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                />
+                <span id="error-followersCount" class="field-error block text-[11px] text-rose-600 mt-1"></span>
+              </div>
+              <div>
+                <label for="blogger-engagementRate" class="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-300 mb-1">
+                  ER % (0.1 — 100.0) *
+                </label>
+                <input
+                  type="number"
+                  id="blogger-engagementRate"
+                  name="engagementRate"
+                  step="0.1"
+                  min="0.1"
+                  max="100.0"
+                  required
+                  value="3.5"
+                  class="w-full px-3.5 py-2 text-xs font-mono rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/90 dark:bg-[#10141f] text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                />
+                <span id="error-engagementRate" class="field-error block text-[11px] text-rose-600 mt-1"></span>
+              </div>
+            </div>
+
+            <div id="blogger-status-group" class="hidden">
+              <label for="blogger-status" class="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-300 mb-1">
+                Статус блогера *
+              </label>
+              <select
+                id="blogger-status"
+                name="status"
+                class="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-[#10141f] text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all cursor-pointer"
+              >
+                <option value="0">0 — Нет ответа (NoAnswer)</option>
+                <option value="1">1 — Согласился (Agreed)</option>
+                <option value="2">2 — Отказался (Disagreed)</option>
+                <option value="3">3 — Опубликовал (Posted)</option>
+              </select>
+              <span id="error-status" class="field-error block text-[11px] text-rose-600 mt-1"></span>
+            </div>
+
+            <div class="flex justify-end gap-2.5 pt-4 border-t border-slate-200/60 dark:border-slate-800">
+              <button
+                type="button"
+                data-modal-close
+                class="px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer"
+              >
+                Отмена
+              </button>
+              <button
+                type="submit"
+                id="blogger-submit-btn"
+                class="px-4 py-2 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-700 rounded-xl shadow-xs transition-all cursor-pointer"
+              >
+                Добавить в реестр
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./src/js/pages/bloggersPage.js"></script>
+  </body>
+</html>

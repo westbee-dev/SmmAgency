@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вход в систему — SmmAgency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Outfit', 'system-ui', 'sans-serif'],
+              display: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+          },
+        },
+      };
+    </script>
+    <script>
+      (function() {
+        const saved = localStorage.getItem('smm_theme');
+        if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/main-DOVEstxf.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/theme-DasQTWpP.js">
+    <link rel="modulepreload" crossorigin href="/assets/authApi-_NJ2DLzj.js">
+    <link rel="stylesheet" crossorigin href="/assets/theme-B604bNKS.css">
+  </head>
+  <body class="liquid-canvas min-h-screen text-slate-900 dark:text-slate-100 antialiased font-sans flex items-center justify-center p-4 transition-colors duration-200">
+    <div id="toast-container" class="fixed top-5 left-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Top-Right Theme Toggle Switch on Login Page -->
+    <div class="fixed top-5 right-5 z-50">
+      <button
+        type="button"
+        data-theme-toggle
+        class="flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white/85 dark:bg-slate-800/85 backdrop-blur-xl hover:bg-white dark:hover:bg-slate-700/80 hover:scale-105 active:scale-95 transition-all shadow-xs cursor-pointer select-none"
+        title="Переключить тему оформления"
+      >
+        <span class="theme-icon-container">
+          <img src="/assets/images/theme-sun.png" alt="Light theme" class="theme-icon-sun" />
+          <img src="/assets/images/theme-moon.png" alt="Dark theme" class="theme-icon-moon" />
+        </span>
+      </button>
+    </div>
+
+    <div class="w-full max-w-md">
+      <!-- Main Glass Card -->
+      <div class="glass-panel rounded-3xl p-8 transition-all dark:bg-[#11151f]/90 dark:border-slate-800">
+        <!-- Logo & Header -->
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-display font-bold text-base shadow-xs">
+            SM
+          </div>
+          <div>
+            <div class="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white leading-none">
+              SmmAgency
+            </div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Инфлюенс-маркетинг агентство</div>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <h1 class="font-display text-xl font-bold text-slate-900 dark:text-white">Вход в систему</h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Авторизуйтесь для доступа к панели управления кампаниями</p>
+        </div>
+
+        <!-- Error Alert (with rich layout) -->
+        <div
+          id="error-message"
+          class="hidden mb-5 p-3.5 rounded-xl bg-rose-50/90 dark:bg-rose-950/40 border border-rose-200/90 dark:border-rose-900/50 text-rose-800 dark:text-rose-200 text-xs flex items-start gap-3 backdrop-blur-md shadow-2xs"
+        >
+          <div id="error-icon" class="p-1 rounded-lg bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-300 shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div id="error-title" class="font-bold text-rose-900 dark:text-rose-100 text-xs mb-0.5">Ошибка</div>
+            <div id="error-text" class="text-rose-700 dark:text-rose-300 text-[11px] leading-relaxed"></div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <form id="login-form" onsubmit="return false;" class="space-y-4">
+          <div>
+            <label for="login" class="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-300 mb-1.5">
+              Логин *
+            </label>
+            <input
+              type="text"
+              id="login"
+              name="login"
+              required
+              minlength="3"
+              maxlength="20"
+              autocomplete="username"
+              placeholder="Введите логин"
+              class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/90 dark:bg-[#151a26] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
+            />
+          </div>
+
+          <div>
+            <label for="password" class="block text-xs font-semibold uppercase text-slate-600 dark:text-slate-300 mb-1.5">
+              Пароль *
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              minlength="6"
+              maxlength="30"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              class="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 dark:border-slate-700/80 bg-white/90 dark:bg-[#151a26] text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 font-mono"
+            />
+          </div>
+
+          <div class="pt-2">
+            <button
+              type="submit"
+              id="submit-btn"
+              class="w-full py-2.5 px-4 text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-700 active:scale-[0.99] rounded-xl shadow-xs transition-all cursor-pointer"
+            >
+              Войти в систему
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Floating Server/Database Status Indicator (Bottom Right Corner) -->
+    <div
+      id="server-status-pill"
+      class="fixed bottom-4 right-4 z-50 flex items-center gap-3 px-3.5 py-2 rounded-2xl bg-white/90 dark:bg-[#131824]/90 backdrop-blur-xl border border-slate-200/90 dark:border-slate-700/80 shadow-[0_8px_30px_rgb(0,0,0,0.08)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] text-xs transition-all duration-300 select-none group hover:shadow-[0_8px_30px_rgb(0,0,0,0.14)]"
+    >
+      <!-- Traffic Light Circles (Red, Blue, Green) -->
+      <div class="flex items-center gap-1.5 p-1 rounded-full bg-slate-100/90 dark:bg-slate-800/90 border border-slate-200/60 dark:border-slate-700/60 shadow-inner">
+        <span
+          id="status-dot-red"
+          class="w-2.5 h-2.5 rounded-full transition-all duration-300 opacity-25 bg-slate-300 dark:bg-slate-600"
+          title="Красный — Сервер недоступен / Ошибка"
+        ></span>
+        <span
+          id="status-dot-blue"
+          class="w-2.5 h-2.5 rounded-full transition-all duration-300 opacity-25 bg-slate-300 dark:bg-slate-600"
+          title="Синий — Проверка соединения"
+        ></span>
+        <span
+          id="status-dot-green"
+          class="w-2.5 h-2.5 rounded-full transition-all duration-300 opacity-25 bg-slate-300 dark:bg-slate-600"
+          title="Зелёный — Сервер подключен и активен"
+        ></span>
+      </div>
+      <div class="flex flex-col">
+        <div class="flex items-center gap-1.5">
+          <span class="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">Сервер:</span>
+          <span id="server-status-text" class="text-xs font-semibold text-slate-700 dark:text-slate-200 font-display">
+            Проверка...
+          </span>
+        </div>
+      </div>
+      <button
+        type="button"
+        id="btn-recheck-server"
+        class="p-1 -mr-1 rounded-xl text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-95 transition-all cursor-pointer"
+        title="Обновить состояние сервера"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="status-refresh-icon"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+      </button>
+    </div>
+
+  </body>
+</html>

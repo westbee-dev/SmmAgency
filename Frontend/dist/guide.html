@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>База знаний & Регламент — SmmAgency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Outfit', 'system-ui', 'sans-serif'],
+              display: ['Bricolage Grotesque', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+          },
+        },
+      };
+    </script>
+    <script>
+      (function() {
+        const saved = localStorage.getItem('smm_theme');
+        if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+    <script type="module" crossorigin src="/assets/guide-C8lKqfF4.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/theme-DasQTWpP.js">
+    <link rel="modulepreload" crossorigin href="/assets/authGuard-DK-ZWsUg.js">
+    <link rel="stylesheet" crossorigin href="/assets/theme-B604bNKS.css">
+  </head>
+  <body class="liquid-canvas min-h-screen md:h-screen md:overflow-hidden text-slate-900 dark:text-slate-100 antialiased font-sans flex flex-col justify-center p-2 sm:p-4 lg:p-6 transition-colors duration-200">
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto w-full md:h-[calc(100vh-3rem)] md:max-h-[860px] md:min-h-[640px] flex flex-col rounded-3xl border border-white/95 dark:border-slate-800/80 bg-white/70 dark:bg-[#11151f]/90 backdrop-blur-2xl shadow-[0_20px_50px_rgba(15,23,42,0.05),inset_0_1px_1px_rgba(255,255,255,1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden transition-all duration-300">
+      <!-- Top Bar -->
+      <div class="px-6 py-3 shrink-0 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200/70 dark:border-slate-800/80 bg-white/50 dark:bg-slate-900/60 backdrop-blur-xl text-xs text-slate-700 dark:text-slate-300">
+        <div class="flex items-center gap-2.5">
+          <span class="font-display font-bold text-sm tracking-tight text-slate-900 dark:text-white">SmmAgency</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <!-- Current Tab Name Badge -->
+          <div class="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-indigo-50/80 dark:bg-indigo-950/50 border border-indigo-200/70 dark:border-indigo-800/60">
+            <span class="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400"></span>
+            <span class="text-xs font-semibold text-indigo-900 dark:text-indigo-200 font-display">База знаний</span>
+          </div>
+
+          <span class="text-slate-300 dark:text-slate-700">|</span>
+
+          <!-- Dark/Light Theme Toggle (Icon Only) -->
+          <button
+            type="button"
+            data-theme-toggle
+            class="flex items-center justify-center w-8 h-8 rounded-xl border border-slate-200/80 dark:border-slate-700/80 bg-white/80 dark:bg-slate-800/80 hover:bg-slate-100/90 dark:hover:bg-slate-700/70 hover:scale-105 active:scale-95 transition-all shadow-2xs cursor-pointer select-none"
+            title="Переключить тему оформления"
+          >
+            <span class="theme-icon-container">
+              <img src="/assets/images/theme-sun.png" alt="Light theme" class="theme-icon-sun" />
+              <img src="/assets/images/theme-moon.png" alt="Dark theme" class="theme-icon-moon" />
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Layout -->
+      <div class="flex-1 min-h-0 flex flex-col md:flex-row overflow-hidden">
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 h-full flex flex-col justify-between shrink-0 border-r border-slate-200/70 dark:border-slate-800/80 bg-white/45 dark:bg-[#0e121b]/80 backdrop-blur-2xl text-slate-700 dark:text-slate-300 overflow-y-auto">
+          <div>
+            <!-- Logo -->
+            <div class="px-6 py-5 border-b border-slate-200/60 dark:border-slate-800/80 bg-white/30 dark:bg-white/5 flex items-center gap-3">
+              <div class="w-9 h-9 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-display font-bold text-sm shadow-xs">
+                SM
+              </div>
+              <div>
+                <div class="font-display text-base font-bold tracking-tight text-slate-900 dark:text-white leading-none">
+                  SmmAgency
+                </div>
+                <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-medium">Инфлюенс-маркетинг</div>
+              </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="p-3 space-y-1">
+              <a
+                href="/businesses.html"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/50 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 dark:text-slate-500"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+                  <span>Бизнесы</span>
+                </div>
+                <span id="count-businesses" class="text-[11px] font-mono tabular-nums text-slate-400 dark:text-slate-500"></span>
+              </a>
+
+              <a
+                href="/bloggers.html"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/50 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 dark:text-slate-500"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  <span>Блогеры</span>
+                </div>
+              </a>
+
+              <a
+                href="/campaigns.html"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/50 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 dark:text-slate-500"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.934a.5.5 0 0 0-.777-.416L16 11"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+                  <span>Кампании</span>
+                </div>
+              </a>
+
+              <a
+                href="/post-stats.html"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-slate-800/50 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 dark:text-slate-500"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
+                  <span>Статистика рилсов</span>
+                </div>
+              </a>
+
+              <!-- ACTIVE: База знаний (Available to all) -->
+              <a
+                href="/guide.html"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-white dark:bg-[#19202f] text-indigo-700 dark:text-white shadow-xs border border-slate-200/80 dark:border-slate-700/80 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600 dark:text-indigo-400"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                  <span>База знаний</span>
+                </div>
+                <span class="text-[10px] uppercase font-bold px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 rounded-md">
+                  Гайд
+                </span>
+              </a>
+
+              <!-- ADMIN ONLY -->
+              <a
+                href="/register.html"
+                data-role="admin"
+                class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-indigo-700 dark:text-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/40 transition-all"
+              >
+                <div class="flex items-center gap-2.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg>
+                  <span>Новый сотрудник</span>
+                </div>
+                <span class="text-[10px] uppercase font-bold px-1.5 py-0.5 bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 rounded-md">
+                  Admin
+                </span>
+              </a>
+            </nav>
+          </div>
+
+          <!-- User Profile Info Footer -->
+          <div class="p-4 border-t border-slate-200/70 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/50 backdrop-blur-xl">
+            <div class="flex items-center justify-between">
+              <div class="overflow-hidden">
+                <div id="user-login-display" class="text-xs font-bold text-slate-900 dark:text-white truncate font-display">...</div>
+                <div class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-0.5">
+                  <span id="user-role-dot" class="w-1.5 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400"></span>
+                  <span id="user-role-name">Загрузка...</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                id="logout-btn"
+                class="p-1.5 rounded-xl text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-white dark:hover:bg-slate-800/80 shadow-2xs transition-all cursor-pointer"
+                title="Выйти"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0 h-full overflow-y-auto p-5 sm:p-7 space-y-6">
+          <!-- Hero Header Card -->
+          <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900 text-white p-6 sm:p-8 shadow-md">
+            <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 max-w-3xl">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-indigo-200 text-xs font-semibold mb-3">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Настольная книга менеджера агентства</span>
+              </div>
+              <h1 class="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                База знаний, регламент и лайфхаки
+              </h1>
+              <p class="text-xs sm:text-sm text-indigo-100/90 mt-2 leading-relaxed">
+                Пошаговый пайплайн работы с инфлюенс-кампаниями, правила взаимодействия с блогерами, формула и нормы расчета вовлеченности (ER), встроенный калькулятор качества и проверенные скрипты переписки.
+              </p>
+
+              <!-- Quick Anchor Pills -->
+              <div class="flex flex-wrap items-center gap-2 mt-5 text-xs font-medium">
+                <a href="#pipeline" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 transition-all">
+                  🔄 Воронка CRM
+                </a>
+                <a href="#er-guide" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 transition-all">
+                  📊 Нормы ER
+                </a>
+                <a href="#calculator" class="px-3 py-1.5 rounded-xl bg-indigo-500/80 hover:bg-indigo-500 text-white font-semibold transition-all">
+                  🧮 Калькулятор ER
+                </a>
+                <a href="#lifehacks" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 transition-all">
+                  💡 Лайфхаки
+                </a>
+                <a href="#scripts" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 transition-all">
+                  💬 Скрипты для Директа
+                </a>
+                <a href="#antifraud" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 border border-white/20 transition-all">
+                  🛡️ Проверка накруток
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 1. Pipeline in CRM -->
+          <section id="pipeline" class="rounded-2xl border border-white/90 dark:border-slate-800/80 bg-white/80 dark:bg-[#131927]/90 backdrop-blur-xl p-6 shadow-xs space-y-4">
+            <div class="flex items-center gap-2.5 pb-3 border-b border-slate-200/60 dark:border-slate-800/80">
+              <div class="p-2 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 rounded-xl border border-indigo-200/60 dark:border-indigo-800/60">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/></svg>
+              </div>
+              <div>
+                <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">
+                  1. Воронка работы в CRM: от первого контакта до отчета
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                  Четкая последовательность действий менеджера для безупречного ведения сделки
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <!-- Step 1 -->
+              <div class="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white/60 dark:bg-[#182030]/80 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300">ШАГ 1</span>
+                  <span class="text-xs text-slate-400 dark:text-slate-500">Вкладка: Бизнесы</span>
+                </div>
+                <h3 class="font-display text-sm font-bold text-slate-800 dark:text-slate-100">Регистрация заказчика</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Внесите бренд/компанию: Instagram handle без собачки (только латиница и точки), нишу (Category) и URL сайта. Проверьте статус бизнеса: <span class="font-semibold text-slate-700 dark:text-slate-200">«Новый»</span> или <span class="font-semibold text-slate-700 dark:text-slate-200">«В работе»</span>.
+                </p>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white/60 dark:bg-[#182030]/80 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300">ШАГ 2</span>
+                  <span class="text-xs text-slate-400 dark:text-slate-500">Вкладка: Блогеры</span>
+                </div>
+                <h3 class="font-display text-sm font-bold text-slate-800 dark:text-slate-100">Скаутинг и статусы</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Подберите блогера, рассчитайте его ER (от 0.1% до 100%). Сразу выставьте статус:
+                  <br /><strong class="text-slate-700 dark:text-slate-200">0 (Нет ответа)</strong> — отправлен оффер.
+                  <br /><strong class="text-emerald-700 dark:text-emerald-400">1 (Согласился)</strong> — утвердил бриф.
+                  <br /><strong class="text-rose-700 dark:text-rose-400">2 (Отказался)</strong> — не сошлись по цене.
+                </p>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white/60 dark:bg-[#182030]/80 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300">ШАГ 3</span>
+                  <span class="text-xs text-slate-400 dark:text-slate-500">Вкладка: Кампании</span>
+                </div>
+                <h3 class="font-display text-sm font-bold text-slate-800 dark:text-slate-100">Создание кампании</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Привяжите кампанию к конкретному бизнесу. Укажите фиксированный бюджет, KPI (ожидаемые охваты) и дедлайн окончания. Все последующие рилсы будут привязаны к этой кампании.
+                </p>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white/60 dark:bg-[#182030]/80 space-y-2">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300">ШАГ 4</span>
+                  <span class="text-xs text-slate-400 dark:text-slate-500">Вкладка: Рилсы</span>
+                </div>
+                <h3 class="font-display text-sm font-bold text-slate-800 dark:text-slate-100">Учет и статистика</h3>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                  После публикации блогер переводится в статус <span class="font-bold text-indigo-700 dark:text-indigo-400">3 (Опубликовал)</span>. Внесите ссылку на рилс, фактические просмотры и вовлеченность. Имя менеджера фиксируется автоматически.
+                </p>
+              </div>
+            </div>
+
+            <!-- Important Rule Alert -->
+            <div class="p-3.5 rounded-xl bg-amber-50/90 dark:bg-amber-950/30 border border-amber-200/90 dark:border-amber-800/60 text-amber-900 dark:text-amber-200 text-xs flex items-start gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600 dark:text-amber-400 shrink-0 mt-0.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>
+              <div>
+                <strong class="font-bold">Главное правило CRM при публикации рилса:</strong>
+                Один блогер может выпустить только один рилс в рамках одной конкретной кампании! Если попытаться добавить второй рилс того же автора на ту же кампанию, система отклонит запрос с ошибкой: <em>«Блогер уже опубликовал рилс в рамках данной кампании»</em>. Если клиенту требуется серия интеграций — создавайте новую подкампанию.
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. What is ER & Norms -->
+          <section id="er-guide" class="rounded-2xl border border-white/90 dark:border-slate-800/80 bg-white/80 dark:bg-[#131927]/90 backdrop-blur-xl p-6 shadow-xs space-y-5">
+            <div class="flex items-center gap-2.5 pb-3 border-b border-slate-200/60 dark:border-slate-800/80">
+              <div class="p-2 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 rounded-xl border border-emerald-200/60 dark:border-emerald-800/60">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
+              </div>
+              <div>
+                <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">
+                  2. Что такое ER (Engagement Rate), как его считать и допустимые нормы
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                  Ключевая метрика оценки качества и «живости» аудитории инфлюенсера
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              <!-- Definition & Formulas -->
+              <div class="space-y-4 text-xs text-slate-600 dark:text-slate-300">
+                <p class="leading-relaxed">
+                  <strong class="text-slate-800 dark:text-slate-100">Engagement Rate (ER)</strong> — коэффициент вовлеченности аудитории. Он показывает, какой процент людей не просто пролистнул контент, а совершил целевую реакцию: поставил лайк, написал комментарий, сохранил пост в закладки или поделился с друзьями.
+                </p>
+
+                <!-- Formula Card 1 -->
+                <div class="p-4 rounded-xl bg-slate-50 dark:bg-[#182030]/80 border border-slate-200/80 dark:border-slate-800/80 space-y-1.5 font-mono">
+                  <div class="text-[11px] font-bold text-indigo-700 dark:text-indigo-400 uppercase">Формула 1: ER по подписчикам (Классическая)</div>
+                  <div class="text-xs font-bold text-slate-800 dark:text-slate-100 bg-white dark:bg-[#111622] p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+                    ER (%) = ((Лайки + Комментарии + Сохранения) / Подписчики) × 100%
+                  </div>
+                  <div class="text-[11px] text-slate-500 dark:text-slate-400 font-sans">
+                    Берется среднее арифметическое реакций за последние 10–12 публикаций (без учета вирусных аномалий).
+                  </div>
+                </div>
+
+                <!-- Formula Card 2 -->
+                <div class="p-4 rounded-xl bg-slate-50 dark:bg-[#182030]/80 border border-slate-200/80 dark:border-slate-800/80 space-y-1.5 font-mono">
+                  <div class="text-[11px] font-bold text-purple-700 dark:text-purple-400 uppercase">Формула 2: ER Reels по просмотрам (Для видео)</div>
+                  <div class="text-xs font-bold text-slate-800 dark:text-slate-100 bg-white dark:bg-[#111622] p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+                    ER Reels (%) = ((Лайки + Комментарии) / Просмотры рилса) × 100%
+                  </div>
+                  <div class="text-[11px] text-slate-500 dark:text-slate-400 font-sans">
+                    Позволяет оценить качество конкретного рекламного ролика независимо от общего числа подписчиков.
+                  </div>
+                </div>
+              </div>
+
+              <!-- ER Tiers Table -->
+              <div class="overflow-hidden rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-[#182030]/70 shadow-2xs">
+                <div class="px-4 py-3 bg-slate-50/80 dark:bg-slate-900/60 border-b border-slate-200/70 dark:border-slate-800/80 font-display text-xs font-bold text-slate-800 dark:text-white">
+                  Нормативы ER по масштабу блогера
+                </div>
+                <div class="divide-y divide-slate-100 dark:divide-slate-800/60 text-xs">
+                  <div class="p-3 flex items-start justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
+                    <div>
+                      <span class="font-bold text-slate-800 dark:text-slate-100">Микро-блогеры</span>
+                      <span class="text-slate-400 dark:text-slate-500 block text-[11px]">5 000 — 50 000 подписчиков</span>
+                    </div>
+                    <div class="text-right">
+                      <span class="inline-block px-2 py-0.5 rounded-md font-mono font-bold text-xs bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
+                        3.5% — 10.0%+
+                      </span>
+                      <span class="block text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Максимальная лояльность</span>
+                    </div>
+                  </div>
+
+                  <div class="p-3 flex items-start justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
+                    <div>
+                      <span class="font-bold text-slate-800 dark:text-slate-100">Мидл-блогеры</span>
+                      <span class="text-slate-400 dark:text-slate-500 block text-[11px]">50 000 — 250 000 подписчиков</span>
+                    </div>
+                    <div class="text-right">
+                      <span class="inline-block px-2 py-0.5 rounded-md font-mono font-bold text-xs bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/60">
+                        2.0% — 4.5%
+                      </span>
+                      <span class="block text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Золотой стандарт</span>
+                    </div>
+                  </div>
+
+                  <div class="p-3 flex items-start justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
+                    <div>
+                      <span class="font-bold text-slate-800 dark:text-slate-100">Макро-блогеры</span>
+                      <span class="text-slate-400 dark:text-slate-500 block text-[11px]">250 000 — 1 000 000</span>
+                    </div>
+                    <div class="text-right">
+                      <span class="inline-block px-2 py-0.5 rounded-md font-mono font-bold text-xs bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">
+                        1.2% — 2.5%
+                      </span>
+                      <span class="block text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Размытие аудитории</span>
+                    </div>
+                  </div>
+
+                  <div class="p-3 flex items-start justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
+                    <div>
+                      <span class="font-bold text-slate-800 dark:text-slate-100">Миллионники / Звезды</span>
+                      <span class="text-slate-400 dark:text-slate-500 block text-[11px]">Более 1 000 000</span>
+                    </div>
+                    <div class="text-right">
+                      <span class="inline-block px-2 py-0.5 rounded-md font-mono font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                        0.8% — 1.8%
+                      </span>
+                      <span class="block text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">Широкий охват бренда</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. Interactive ER Calculator Widget -->
+          <section id="calculator" class="rounded-2xl border border-indigo-200/80 dark:border-indigo-900/60 bg-gradient-to-br from-indigo-50/70 via-white to-purple-50/50 dark:from-[#151a2d] dark:via-[#131724] dark:to-[#17152b] backdrop-blur-xl p-6 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-indigo-100 dark:border-indigo-950/80">
+              <div class="flex items-center gap-2.5">
+                <div class="p-2 bg-indigo-600 text-white rounded-xl shadow-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>
+                </div>
+                <div>
+                  <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">
+                    3. Экспресс-калькулятор ER блогера
+                  </h2>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">
+                    Вбейте данные со страницы блогера для мгновенного расчета и аудита
+                  </p>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded-lg bg-indigo-100/80 dark:bg-indigo-950/80 text-indigo-800 dark:text-indigo-300 font-bold border border-indigo-200/60 dark:border-indigo-800/60">
+                Live Tool
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <!-- Inputs Column -->
+              <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+                <div>
+                  <label for="calc-followers" class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Подписчики блогера *
+                  </label>
+                  <input
+                    type="number"
+                    id="calc-followers"
+                    value="25000"
+                    min="1"
+                    class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#182030] text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-mono"
+                    placeholder="Например, 45000"
+                  />
+                </div>
+
+                <div>
+                  <label for="calc-views" class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Средние просмотры Reels
+                  </label>
+                  <input
+                    type="number"
+                    id="calc-views"
+                    value="18000"
+                    min="0"
+                    class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#182030] text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-mono"
+                    placeholder="Например, 15000"
+                  />
+                </div>
+
+                <div>
+                  <label for="calc-likes" class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Среднее кол-во лайков *
+                  </label>
+                  <input
+                    type="number"
+                    id="calc-likes"
+                    value="1200"
+                    min="0"
+                    class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#182030] text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-mono"
+                    placeholder="Например, 1200"
+                  />
+                </div>
+
+                <div>
+                  <label for="calc-comments" class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                    Среднее кол-во комментариев *
+                  </label>
+                  <input
+                    type="number"
+                    id="calc-comments"
+                    value="65"
+                    min="0"
+                    class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#182030] text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 font-mono"
+                    placeholder="Например, 45"
+                  />
+                </div>
+              </div>
+
+              <!-- Output Result Column -->
+              <div class="rounded-xl border border-white/90 dark:border-slate-800 bg-white/90 dark:bg-[#182030]/90 p-5 flex flex-col justify-between shadow-2xs space-y-3">
+                <div>
+                  <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Результат расчета
+                  </div>
+                  <div class="flex items-baseline gap-2 mt-1">
+                    <span id="calc-er-result" class="font-display text-3xl font-extrabold text-indigo-700 dark:text-indigo-400 font-mono">
+                      5.06%
+                    </span>
+                    <span class="text-xs text-slate-400 dark:text-slate-500 font-medium">ER</span>
+                  </div>
+                  <div id="calc-badge" class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
+                    🟢 Отличная вовлеченность
+                  </div>
+                </div>
+
+                <div class="text-[11px] text-slate-600 dark:text-slate-300 border-t border-slate-100 dark:border-slate-800 pt-3" id="calc-verdict">
+                  Показатель выше нормы для данного сегмента блогеров. Высокий отклик живой аудитории.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 4. Lifehacks for Managers -->
+          <section id="lifehacks" class="rounded-2xl border border-white/90 dark:border-slate-800/80 bg-white/80 dark:bg-[#131927]/90 backdrop-blur-xl p-6 shadow-xs space-y-4">
+            <div class="flex items-center gap-2.5 pb-3 border-b border-slate-200/60 dark:border-slate-800/80">
+              <div class="p-2 bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 rounded-xl border border-amber-200/60 dark:border-amber-800/60">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div>
+                <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">
+                  4. Блок лайфхаков для эффективной работы менеджера
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                  Проверенные приемы и фишки агентства, которые экономят бюджет и время
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+              <!-- Lifehack 1 -->
+              <div class="p-4 rounded-xl border border-slate-200/70 dark:border-slate-800 bg-white/70 dark:bg-[#182030]/80 space-y-2">
+                <div class="flex items-center gap-2 font-display font-bold text-indigo-700 dark:text-indigo-400 text-sm">
+                  <span>⚡ 01. Правило «Двойного дедлайна»</span>
+                </div>
+                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Если клиент ожидает публикацию рилса 25-го числа, блогеру в договоре и ТЗ всегда ставьте дедлайн на <strong>21–22 число</strong>. Около 30% блогеров сдвигают сроки по бытовым причинам. Этот буфер защитит вас от штрафов заказчика.
+                </p>
+              </div>
+
+              <!-- Lifehack 2 -->
+              <div class="p-4 rounded-xl border border-slate-200/70 dark:border-slate-800 bg-white/70 dark:bg-[#182030]/80 space-y-2">
+                <div class="flex items-center gap-2 font-display font-bold text-indigo-700 dark:text-indigo-400 text-sm">
+                  <span>⚡ 02. Согласование черновика</span>
+                </div>
+                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Никогда не разрешайте блогеру публиковать видео сразу в ленту. Внесите обязательный пункт: <em>«Черновик ролика отправляется на согласование менеджеру за 48 часов до выгрузки»</em>. Переснимать уже выложенный рилс откажется 95% авторов.
+                </p>
+              </div>
+
+              <!-- Lifehack 3 -->
+              <div class="p-4 rounded-xl border border-slate-200/70 dark:border-slate-800 bg-white/70 dark:bg-[#182030]/80 space-y-2">
+                <div class="flex items-center gap-2 font-display font-bold text-indigo-700 dark:text-indigo-400 text-sm">
+                  <span>⚡ 03. Персональный промокод</span>
+                </div>
+                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                  В Reels ссылка в описании не кликается! Чтобы измерить прямую конверсию, всегда просите заказчика выпустить уникальный короткий промокод автора (напр. <code class="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded font-mono text-indigo-600 dark:text-indigo-400">MARIA15</code>) и дублируйте его голосом и плашкой на видео.
+                </p>
+              </div>
+
+              <!-- Lifehack 4 -->
+              <div class="p-4 rounded-xl border border-slate-200/70 dark:border-slate-800 bg-white/70 dark:bg-[#182030]/80 space-y-2">
+                <div class="flex items-center gap-2 font-display font-bold text-indigo-700 dark:text-indigo-400 text-sm">
+                  <span>⚡ 04. Время отправки оффера</span>
+                </div>
+                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Лучшее время писать блогерам в Директ или Telegram — <strong>с 11:00 до 13:00</strong> и <strong>с 19:00 до 21:00</strong>. Утром сообщения тонут в спаме, а в обеденные часы и вечером блогеры проверяют входящие запросы сотрудничества внимательнее всего.
+                </p>
+              </div>
+
+              <!-- Lifehack 5 -->
+              <div class="p-4 rounded-xl border border-slate-200/70 dark:border-slate-800 bg-white/70 dark:bg-[#182030]/80 space-y-2">
+                <div class="flex items-center gap-2 font-display font-bold text-indigo-700 dark:text-indigo-400 text-sm">
+                  <span>⚡ 05. Торг и пакетные размещения</span>
+                </div>
+                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Если блогер называет цену выше лимита клиента, предложите формат: <em>«1 Reels + 2 Stories в подарок»</em> или пакет на 2 интеграции в течение двух месяцев. В 70% случаев инфлюенсер делает скидку 15–25% при гарантированном объеме.
+                </p>
+              </div>
+
+              <!-- Lifehack 6 -->
+              <div class="p-4 rounded-xl border border-slate-200/70 dark:border-slate-800 bg-white/70 dark:bg-[#182030]/80 space-y-2">
+                <div class="flex items-center gap-2 font-display font-bold text-indigo-700 dark:text-indigo-400 text-sm">
+                  <span>⚡ 06. Фиксация в CRM в ту же минуту</span>
+                </div>
+                <p class="text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Как только написали блогеру — сразу занесите его в CRM в статусе <span class="font-bold text-slate-700 dark:text-slate-200">0 (Нет ответа)</span>. Это исключает дублирование, когда два менеджера пишут одной и той же девушке-блогеру с разных аккаунтов агентства.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 5. Outreach Message Scripts -->
+          <section id="scripts" class="rounded-2xl border border-white/90 dark:border-slate-800/80 bg-white/80 dark:bg-[#131927]/90 backdrop-blur-xl p-6 shadow-xs space-y-4">
+            <div class="flex items-center gap-2.5 pb-3 border-b border-slate-200/60 dark:border-slate-800/80">
+              <div class="p-2 bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-400 rounded-xl border border-purple-200/60 dark:border-purple-800/60">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div>
+                <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">
+                  5. Готовые шаблоны сообщений блогерам (Copy & Paste)
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                  Нажмите на кнопку, чтобы скопировать скрипт в буфер обмена
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <!-- Script 1 -->
+              <div class="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-[#182030]/80 flex flex-col justify-between space-y-3">
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-slate-900 dark:text-white font-display">Скрипт #1: Первое касание (Холодный оффер)</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono">Директ</span>
+                  </div>
+                  <p id="script-text-1" class="text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-[#111622] p-2.5 rounded-lg border border-slate-200/70 dark:border-slate-800 font-sans leading-relaxed select-all">
+Здравствуйте, [Имя]! Очень понравился ваш недавний рилс про [тема ролика] — подача просто супер 🔥 Меня зовут [Ваше Имя], представляю агентство SmmAgency. Сейчас мы подбираем авторов для кампании бренда [Название Бренда]. Подскажите, открыты ли к коммерческому сотрудничеству по Reels в ближайшие 2 недели? С радостью пришлю бриф и обсудим условия!
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  data-copy-target="script-text-1"
+                  class="copy-btn w-full py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  <span>Скопировать шаблон</span>
+                </button>
+              </div>
+
+              <!-- Script 2 -->
+              <div class="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-[#182030]/80 flex flex-col justify-between space-y-3">
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-slate-900 dark:text-white font-display">Скрипт #2: Напоминание о черновике</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 font-mono">Контроль</span>
+                  </div>
+                  <p id="script-text-2" class="text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-[#111622] p-2.5 rounded-lg border border-slate-200/70 dark:border-slate-800 font-sans leading-relaxed select-all">
+[Имя], добрый день! Напоминаю, что по нашей договоренности мы ждем черновой монтаж рилса сегодня до 18:00, чтобы успеть согласовать его с клиентом и выложить ролик точно в намеченный слот [Дата]. Будем очень ждать файл!
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  data-copy-target="script-text-2"
+                  class="copy-btn w-full py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  <span>Скопировать шаблон</span>
+                </button>
+              </div>
+
+              <!-- Script 3 -->
+              <div class="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-[#182030]/80 flex flex-col justify-between space-y-3">
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-slate-900 dark:text-white font-display">Скрипт #3: Запрос статистики рилса</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-mono">Отчетность</span>
+                  </div>
+                  <p id="script-text-3" class="text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-[#111622] p-2.5 rounded-lg border border-slate-200/70 dark:border-slate-800 font-sans leading-relaxed select-all">
+[Имя], спасибо за крутой ролик! Прошли первые 48 часов с момента выхода. Пришлите, пожалуйста, скриншот детальной статистики рилса из профпанели (охваты, просмотры, репосты и сохранения) для внесения в финальный отчет заказчику.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  data-copy-target="script-text-3"
+                  class="copy-btn w-full py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  <span>Скопировать шаблон</span>
+                </button>
+              </div>
+
+              <!-- Script 4 -->
+              <div class="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-[#182030]/80 flex flex-col justify-between space-y-3">
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-slate-900 dark:text-white font-display">Скрипт #4: Мягкий пинг (если молчит)</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 font-mono">Follow-up</span>
+                  </div>
+                  <p id="script-text-4" class="text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-[#111622] p-2.5 rounded-lg border border-slate-200/70 dark:border-slate-800 font-sans leading-relaxed select-all">
+[Имя], добрый день! Подскажите, удалось ли ознакомиться с предложением выше? Сейчас мы финализируем список авторов на этот месяц, будем рады видеть вас в составе кампании 🙌
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  data-copy-target="script-text-4"
+                  class="copy-btn w-full py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  <span>Скопировать шаблон</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- 6. Antifraud / Fake Detection -->
+          <section id="antifraud" class="rounded-2xl border border-white/90 dark:border-slate-800/80 bg-white/80 dark:bg-[#131927]/90 backdrop-blur-xl p-6 shadow-xs space-y-4">
+            <div class="flex items-center gap-2.5 pb-3 border-b border-slate-200/60 dark:border-slate-800/80">
+              <div class="p-2 bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-400 rounded-xl border border-rose-200/60 dark:border-rose-800/60">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+              </div>
+              <div>
+                <h2 class="font-display text-lg font-bold text-slate-900 dark:text-white">
+                  6. Антифрод: как за 60 секунд выявить накрутку у блогера
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                  Чек-лист для менеджера перед добавлением блогера в базу
+                </p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-600 dark:text-slate-300">
+              <div class="p-4 rounded-xl bg-slate-50/80 dark:bg-[#182030]/80 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                <span class="font-bold text-slate-900 dark:text-slate-100 block font-display">🚩 1. Пропорция комментариев</span>
+                <p class="leading-relaxed">
+                  Если на посте 5 000 лайков и всего 3–5 комментариев вида «🔥🔥🔥» или однотипные смайлы от пустых профилей без аватарок — блогер крутит лайки через буксы и биржи. У живого блогера минимум 1–2 развернутых комментария на 100 лайков.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-50/80 dark:bg-[#182030]/80 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                <span class="font-bold text-slate-900 dark:text-slate-100 block font-display">🚩 2. Просмотры Reels vs Подписчики</span>
+                <p class="leading-relaxed">
+                  У живого автора средние просмотры Reels составляют от <strong>20% до 150%</strong> от числа подписчиков. Если у блогера 150 000 подписчиков, а рилсы стабильно набирают по 1 200 просмотров — 90% подписчиков мертвы или накручены гивами.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-xl bg-slate-50/80 dark:bg-[#182030]/80 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                <span class="font-bold text-slate-900 dark:text-slate-100 block font-display">🚩 3. Вкладка «Отметки»</span>
+                <p class="leading-relaxed">
+                  Зайдите во вкладку с отметками аккаунта. Живого блогера часто отмечают друзья, бренды, подписчики и коллеги. Если вкладка пуста или там только спам от казино/крипты — аккаунт изолирован и искусственно раздут.
+                </p>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+  </body>
+</html>

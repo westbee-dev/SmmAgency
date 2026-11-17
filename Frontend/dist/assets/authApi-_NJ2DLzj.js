@@ -1,0 +1,1 @@
+import{a as i}from"./theme-DasQTWpP.js";const r={login:(t,a)=>i.post("/api/Authorization/authorization",{login:t,password:a}),register:(t,a,e)=>i.post("/api/Authorization/registration",{login:t,password:a,role:e}),getUsers:()=>i.get("/api/Authorization/users"),deleteUser:t=>i.delete(`/api/Users/${t}`)};export{r as a};
