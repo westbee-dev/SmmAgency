@@ -7,7 +7,18 @@ import { initServerStatusWidget } from '../utils/serverStatusWidget.js';
 import { setupThemeToggle } from '../utils/theme.js';
 
 export function checkAuth(requiredRole = null) {
-  const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+  let token = localStorage.getItem(TOKEN_STORAGE_KEY);
+  if (!token) {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const qToken = urlParams.get('token');
+      if (qToken) {
+        localStorage.setItem(TOKEN_STORAGE_KEY, qToken);
+        token = qToken;
+      }
+    } catch {}
+  }
+
   if (!token) {
     window.location.href = '/index.html';
     return null;

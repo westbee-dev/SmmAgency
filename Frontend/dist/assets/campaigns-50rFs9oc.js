@@ -1,4 +1,4 @@
-import{U as G,r as E,s as o,B as H,A as J}from"./theme-DasQTWpP.js";import{c as K}from"./authGuard-DK-ZWsUg.js";import{c as m}from"./campaignsApi-DGpu0RLH.js";import{b as Q}from"./businessesApi-CisEMkuw.js";import{i as V,o as S,e as c,c as W,d as X,r as Y,g as Z,s as _}from"./modal-DUcl0stV.js";const R=K();var D;if(R){let z=function(a){if(!a||a.length===0){const e=k?"По заданному запросу кампании не найдены":"В базе пока нет активных рекламных кампаний";i.innerHTML=`
+import{U as G,r as E,s as o,B as H,A as J}from"./theme-DasQTWpP.js";import{c as K}from"./authGuard-Cq8U84WP.js";import{c as m}from"./campaignsApi-DGpu0RLH.js";import{b as Q}from"./businessesApi-CisEMkuw.js";import{i as V,o as S,e as c,c as W,d as X,r as Y,g as Z,s as _}from"./modal-DUcl0stV.js";const R=K();var D;if(R){let z=function(a){if(!a||a.length===0){const e=k?"По заданному запросу кампании не найдены":"В базе пока нет активных рекламных кампаний";i.innerHTML=`
         <tr>
           <td colspan="5" class="px-5 py-8 text-center text-slate-400">
             ${e}
