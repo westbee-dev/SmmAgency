@@ -1,7 +1,7 @@
 # SmmAgency — Платформа управления инфлюенс-маркетингом и SMM-кампаниями
 
 <p align="center">
-  <img src="docs/screenshots/02-businesses.png" alt="SmmAgency CRM Preview" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" />
+  <img src="docs/screenshots/00-main-screenshot.png" alt="SmmAgency CRM Preview" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);" />
 </p>
 
 <p align="center">
